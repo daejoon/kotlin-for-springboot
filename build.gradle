@@ -1,49 +1,60 @@
 buildscript {
-    ext.kotlin_version = '1.2.21'
-    ext.spring_boot_version = '1.5.10.RELEASE'
+    ext {
+        kotlin_version = '1.2.21'
+        spring_boot_version = '1.5.10.RELEASE'
+        querydsl_version = '4.1.4'
+    }
 
     repositories {
+        mavenCentral()
         jcenter()
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"//기본은 final이다. open으로 변경한다.
+        classpath "org.jetbrains.kotlin:kotlin-noarg:$kotlin_version"// 해당 클래스들의 기본 생성자(Arguments가 없는것)을 생성한다.
         classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version"
     }
 }
 
+/** plugins **/
+apply plugin: 'java'
 apply plugin: 'kotlin'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'idea'
 apply plugin: 'kotlin-spring'
 apply plugin: 'org.springframework.boot'
-apply plugin: 'idea'
 
-group = 'd2'
-version = '0.0.1'
-sourceCompatibility = 1.8
-
-sourceSets {
-    main.kotlin.srcDirs += 'src/main/kotlin'
-    main.java.srcDirs += 'src/main/java'
-}
-
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version" // require
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa"
+    compile "com.querydsl:querydsl-core:$querydsl_version"
+    compile "com.querydsl:querydsl-jpa:$querydsl_version"
+    kapt "com.querydsl:querydsl-apt:$querydsl_version:jpa"// 끝에 :jpa로 끝난다.
+    runtime "com.h2database:h2"
+    testCompile "org.springframework.boot:spring-boot-starter-test"
 }
 
 repositories {
     jcenter()
 }
 
-dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version" // require
-    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    compile "org.springframework.boot:spring-boot-starter-data-jpa"
-    compile "org.springframework.boot:spring-boot-starter-jdbc"
-    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
-    compile "org.springframework.boot:spring-boot-starter-web"
-    runtime "com.h2database:h2"
-    testCompile "org.springframework.boot:spring-boot-starter-test"
+group = 'd2'
+version = '0.0.2'
+
+sourceSets {
+    main.kotlin.srcDirs += 'src/main/kotlin'
+    main.java.srcDirs += 'src/main/java'
+}
+
+idea {
+    module {
+        def kaptMain = file('build/generated/source/kapt/main')
+        sourceDirs += kaptMain
+        generatedSourceDirs += kaptMain
+    }
 }
