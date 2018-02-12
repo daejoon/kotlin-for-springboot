@@ -46,9 +46,11 @@ repositories {
 group = 'd2'
 version = '0.0.2'
 
-//sourceCompatibility = '1.8'
-//targetCompatibility = '1.8'
+/** Language Level */
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 
+/** Kotlin Target platform */
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions {
         jvmTarget = '1.8'
