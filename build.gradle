@@ -46,6 +46,15 @@ repositories {
 group = 'd2'
 version = '0.0.2'
 
+//sourceCompatibility = '1.8'
+//targetCompatibility = '1.8'
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
 sourceSets {
     main.kotlin.srcDirs += 'src/main/kotlin'
     main.java.srcDirs += 'src/main/java'
