@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
+import org.springframework.boot.info.BuildProperties
 import org.springframework.core.env.Environment
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -25,9 +26,12 @@ class Application: CommandLineRunner {
     @Autowired
     lateinit var env: Environment
 
+    @Autowired(required = false)
+    var buildInfo: BuildProperties? = null
+
     override fun run(vararg args: String?) {
         log.info("Profile: '{}'", env.activeProfiles)
-        var user = QUser.user
+        log.info("Version: '{}'", buildInfo?.version ?: "Faild to load.")
     }
 
     @GetMapping(value = arrayOf("", "/"))
