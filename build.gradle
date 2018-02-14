@@ -22,9 +22,9 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'idea'
 apply plugin: 'kotlin-spring'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'idea'
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version" // require
@@ -44,7 +44,8 @@ repositories {
 }
 
 group = 'd2'
-version = '0.0.2'
+version = '0.0.3'
+buildDir = 'target'
 
 /** Language Level */
 sourceCompatibility = '1.8'
@@ -60,7 +61,7 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 sourceSets {
     main.kotlin.srcDirs += 'src/main/kotlin'
     main.java.srcDirs += 'src/main/java'
-    main.resources.srcDirs += 'src/resources'
+    main.resources.srcDirs += 'src/main/resources'
 }
 
 idea {
@@ -69,4 +70,14 @@ idea {
         sourceDirs += kaptMain
         generatedSourceDirs += kaptMain
     }
+}
+
+//processResources {
+//    filesMatching('gradle.properties') {
+//        expand(project.properties)
+//    }
+//}
+
+springBoot  {
+    buildInfo()
 }

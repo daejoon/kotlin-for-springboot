@@ -2,7 +2,6 @@ package d2
 
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.Banner
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
@@ -10,7 +9,6 @@ import org.springframework.core.env.Environment
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import java.io.PrintStream
 import java.util.concurrent.atomic.AtomicLong
 
 /**
@@ -29,6 +27,7 @@ class Application: CommandLineRunner {
 
     override fun run(vararg args: String?) {
         log.info("Profile: '{}'", env.activeProfiles)
+        var user = QUser.user
     }
 
     @GetMapping(value = arrayOf("", "/"))
@@ -42,20 +41,5 @@ class Application: CommandLineRunner {
 fun main(args: Array<String>) {
     SpringApplicationBuilder(Application::class.java)
             .sources(Application::class.java)
-            .bannerMode(Banner.Mode.LOG)
-            .banner(Banner { environment, sourceClass, out -> getBanner(environment, sourceClass, out) })
             .run(*args)
-}
-
-fun getBanner(env: Environment, clazz: Class<*>, out: PrintStream) {
-    val banner =  """
-________       .___________
-\______ \    __| _/\_____  \
- |    |  \  / __ |  /  ____/
- |    `   \/ /_/ | /       \
-/_______  /\____ | \_______ \
-        \/      \/         \/
-                  ::ddoong2::
-"""
-    out.print(banner)
 }
