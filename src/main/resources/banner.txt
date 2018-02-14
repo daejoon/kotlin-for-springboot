@@ -5,4 +5,4 @@ ________       .___________
  |    `   \/ /_/ | /       \
 /_______  /\____ | \_______ \
         \/      \/         \/
-:: ddoong2 :: ${application.formatted-version}
+:: ddoong2 ::   ${application.formatted-version}
