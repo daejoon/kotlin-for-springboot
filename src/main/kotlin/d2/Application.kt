@@ -25,7 +25,7 @@ class Application: CommandLineRunner {
     val counter = AtomicLong()
 
     @Autowired
-    lateinit var env: Environment;
+    lateinit var env: Environment
 
     override fun run(vararg args: String?) {
         log.info("Profile: '{}'", env.activeProfiles)
@@ -55,7 +55,7 @@ ________       .___________
  |    `   \/ /_/ | /       \
 /_______  /\____ | \_______ \
         \/      \/         \/
-                     [ddoong2]
+                  ::ddoong2::
 """
     out.print(banner)
 }
