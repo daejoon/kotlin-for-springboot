@@ -54,7 +54,7 @@ targetCompatibility = '1.8'
 
 jar {
     manifest {
-        attributes  'Title': 'Kotlin for springboot', 'Implementation-Version': version, 'Main-Class': mainClassName
+        attributes  'Implementation-Title': 'Kotlin for springboot', 'Implementation-Version': version, 'Main-Class': mainClassName
     }
     dependsOn configurations.runtime
     from {
