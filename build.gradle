@@ -54,6 +54,25 @@ dependencies {
     testCompile "org.springframework.boot:spring-boot-starter-test"
 }
 
+/**
+ * Spring.profiles.active
+ * 프로파일이 존재하면 application-{profile}.yml을 로딩한다.
+ * 프로파일이 존재하지 않는다면 application.yml을 로딩한다.
+ */
+final SPRING_CONFIG = {
+    final PROFILE  = System.getProperty("spring.profiles.active")
+    println "-Dspring.profiles.active='${PROFILE}'"
+
+    def spring_config
+    if (PROFILE) {
+        spring_config = new org.yaml.snakeyaml.Yaml().load( new File("src/main/resources/application-${PROFILE}.yml").newInputStream())
+    } else {
+        spring_config = new org.yaml.snakeyaml.Yaml().load( new File("src/main/resources/application.yml").newInputStream())
+    }
+
+    return spring_config
+}()
+
 group = 'd2'
 version = '0.0.3'
 buildDir = 'out'
@@ -97,21 +116,6 @@ idea {
 springBoot  {
     buildInfo()
 }
-
-/** application-{profile}.yml을 로딩한다. */
-final SPRING_CONFIG = {
-    final PROFILE  = System.getProperty("spring.profiles.active")
-    println "-Dspring.profiles.active='${PROFILE}'"
-
-    def spring_config
-    if (PROFILE) {
-        spring_config = new org.yaml.snakeyaml.Yaml().load( new File("src/main/resources/application-${PROFILE}.yml").newInputStream())
-    } else {
-        spring_config = new org.yaml.snakeyaml.Yaml().load( new File("src/main/resources/application.yml").newInputStream())
-    }
-
-    return spring_config
-}()
 
 flyway {
     url = SPRING_CONFIG.spring.datasource.url
