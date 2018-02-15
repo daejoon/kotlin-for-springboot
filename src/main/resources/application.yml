@@ -1,3 +1,13 @@
+logging:
+  config: classpath:logback-spring.xml
+  path: ~/JavaDE/kotlin-for-springboot/logs
+  file: ~/JavaDE/kotlin-for-springboot/logs/application.log
+  level:
+    d2: warn
+    org.springframework: info
+    org.thymeleaf: info
+    org.hibernate.SQL: info
+
 spring:
   datasource:
     driver-class-name: org.h2.Driver
@@ -9,8 +19,14 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
       use-new-id-generator-mappings: true
     properties:
       hibernate:
         format_sql: true
+
+flyway:
+  enabled: true
+  encoding: UTF-8
+  user: sa
+  password:
