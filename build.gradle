@@ -107,7 +107,7 @@ sourceSets {
 
 idea {
     module {
-        def kaptMain = file('build/generated/source/kapt/main')
+        def kaptMain = file('out/generated/source/kapt/main')
         sourceDirs += kaptMain
         generatedSourceDirs += kaptMain
     }
