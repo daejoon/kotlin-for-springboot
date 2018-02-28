@@ -115,7 +115,7 @@ repositories {
 }
 
 dependencies {
-    compile("org.jetbrains.kotlin:kotlin-stdlib:${kotlin_version}")// require
+    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlin_version}")// require
     compile("org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
