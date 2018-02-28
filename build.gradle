@@ -16,13 +16,13 @@ buildscript {
     }
 
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"//기본은 final이다. open으로 변경한다.
-        classpath "org.jetbrains.kotlin:kotlin-noarg:$kotlin_version"// 해당 클래스들의 기본 생성자(Arguments가 없는것)을 생성한다.
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version"
-        classpath "com.h2database:h2:$h2_version"
-        classpath "gradle.plugin.com.boxfuse.client:gradle-plugin-publishing:$flyway_version"
-        classpath "org.yaml:snakeyaml:$yaml_version"
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlin_version}")//기본은 final이다. open으로 변경한다.
+        classpath("org.jetbrains.kotlin:kotlin-noarg:${kotlin_version}")// 해당 클래스들의 기본 생성자(Arguments가 없는것)을 생성한다.
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}")
+        classpath("com.h2database:h2:${h2_version}")
+        classpath("gradle.plugin.com.boxfuse.client:gradle-plugin-publishing:${flyway_version}")
+        classpath("org.yaml:snakeyaml:${yaml_version}")
     }
 }
 
@@ -36,23 +36,6 @@ apply plugin: 'kotlin-spring'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'org.flywaydb.flyway'
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version" // require
-    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    compile "org.springframework.boot:spring-boot-starter-web"
-    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
-    compile "org.springframework.boot:spring-boot-starter-data-jpa"
-    compile "com.querydsl:querydsl-core:$querydsl_version"
-    compile "com.querydsl:querydsl-jpa:$querydsl_version"
-    kapt "com.querydsl:querydsl-apt:$querydsl_version:jpa"// 끝에 :jpa로 끝난다.
-    compile "org.flywaydb:flyway-core:$flyway_version"
-    runtime "com.h2database:h2"
-    testCompile "org.springframework.boot:spring-boot-starter-test"
-}
 
 /**
  * Spring.profiles.active
@@ -73,29 +56,34 @@ final SPRING_CONFIG = {
     return spring_config
 }()
 
+
 group = 'd2'
 version = '0.0.3'
 buildDir = 'out'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 mainClassName = 'd2.ApplicationKt'
 
-/** Language Level */
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+compileKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = "1.8"
+    }
+}
 
 jar {
     manifest {
-        attributes  'Implementation-Title': 'Kotlin for springboot', 'Implementation-Version': version, 'Main-Class': mainClassName
+        attributes 'Implementation-Title': 'Kotlin for springboot', 'Implementation-Version': version, 'Main-Class': mainClassName
     }
     dependsOn configurations.runtime
     from {
         configurations.compile.collect {it.isDirectory()? it: zipTree(it)}
-    }
-}
-
-/** Kotlin Target platform */
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions {
-        jvmTarget = '1.8'
     }
 }
 
@@ -107,7 +95,7 @@ sourceSets {
 
 idea {
     module {
-        def kaptMain = file('out/generated/source/kapt/main')
+        def kaptMain = file("${buildDir}/generated/source/kapt/main")
         sourceDirs += kaptMain
         generatedSourceDirs += kaptMain
     }
@@ -120,4 +108,22 @@ springBoot  {
 flyway {
     url = SPRING_CONFIG.spring.datasource.url
     user = SPRING_CONFIG.flyway.user
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile("org.jetbrains.kotlin:kotlin-stdlib:${kotlin_version}")// require
+    compile("org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}")
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("com.querydsl:querydsl-core:${querydsl_version}")
+    compile("com.querydsl:querydsl-jpa:${querydsl_version}")
+    kapt("com.querydsl:querydsl-apt:${querydsl_version}:jpa")// 끝에 :jpa로 끝난다.
+    compile("org.flywaydb:flyway-core:${flyway_version}")
+    runtime("com.h2database:h2")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
 }
