@@ -25,18 +25,18 @@ import org.springframework.web.bind.annotation.RestController
  */
 @RestController
 @SpringBootApplication
-class Application: CommandLineRunner {
+class Application {
     private val log = LoggerFactory.getLogger(Application::class.java)
 
     @Autowired
     lateinit var env: Environment
 
-    @Autowired(required = false)
-    var buildInfo: BuildProperties? = null
+    @Autowired
+    lateinit var buildInfo: BuildProperties
 
-    override fun run(vararg args: String?) {
+    fun init() = CommandLineRunner {
         log.info("Profile: '{}'", env.activeProfiles)
-        log.info("Version: '{}'", buildInfo?.version ?: "Failed to load.")
+        log.info("Version: '{}'", buildInfo.version)
     }
 
     @GetMapping(value = arrayOf("", "/"))
